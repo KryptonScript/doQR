@@ -1,0 +1,13 @@
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.inputUrl {
+    padding: 10px;
+    width: 300px;
+}
+
+.generateBtn {
+    padding: 10px 20px;
+}
