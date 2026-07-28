@@ -13,61 +13,62 @@ function App() {
     setLoading(true);
 
     try {
-    const response = await fetch("/api/generate", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ url }),
-    });
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok) {
-      setError(data.error);
-    } else {
-      setQrImage(data.qrImage);
+      if (!response.ok) {
+        setError(data.error);
+      } else {
+        setQrImage(data.qrImage);
+      }
+    } catch (err) {
+      setError("Server connection failed");
     }
-    
-  } catch (err) {
-    setError("Server connection failed");
-  }
 
-  setLoading(false);
-  }
+    setLoading(false);
+  };
 
   return (
     <div className="container">
-      <h1>doQR - QR Code Generator</h1>
+      <h1>dOQR - QR Code Generator</h1>
 
-      <input type="text"
-      placeholder="Please enter URL here:) - (include https://)"
-      value={url}
-      onChange={(e) => setUrl(e.target.value)}
-      className="inputUrl" />
+      <input
+        type="text"
+        placeholder="Please enter URL here:) - (include https://)"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+        className="inputUrl"
+      />
 
-      <br /><br />
+      <br />
+      <br />
 
-      <button onClick={generateQR} className="generateBtn">
+      <button onClick={generateQR} className="generateBtn" disabled={loading}>
         {loading ? "Generating..." : "Generate"}
-        Generate
       </button>
 
-      <br /><br />
+      <br />
+      <br />
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {qrImage && (
         <>
-        <img src={qrImage} alt="QR Code" />
-        <br /><br />
-        <a href={qrImage} download="qr-code.jpeg">
-          <button style={{ padding: "8px 16px"}}>
-            Download QR
-          </button>
-        </a>
+          <img src={qrImage} alt="QR Code" />
+          <br />
+          <br />
+          <a href={qrImage} download="qr-code.png">
+            <button style={{ padding: "8px 16px" }}>Download QR</button>
+          </a>
         </>
-        )}
+      )}
     </div>
   );
 }

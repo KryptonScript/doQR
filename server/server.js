@@ -4,7 +4,7 @@ import QRCode from "qrcode";
 import validator from "validator";
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -21,16 +21,16 @@ app.post("/api/generate", async (req, res) => {
             return res.status(400).json({error: "Invalid URL format. Include http:// or https://"})
         }
 
-        const qrBuffer = await QRCode.toBuffer(url, {
-            type: "jpeg",
-            quality: 1.00,
-            margin: 2, 
-            width: 300
+        const qrImage = await QRCode.toDataURL(url, {
+            margin: 2,
+            width: 300,
+            errorCorrectionLevel: "M"
         });
 
         res.json({ qrImage });
         
     } catch (error) {
+        console.error("QR generation failed:", error);
         res.status(500).json({ error: "Server error" });
     }
 });
